@@ -1,9 +1,2 @@
-blinker
-click
-colorama
-Flask
-itsdangerous
-Jinja2
-MarkupSafe
-mysql-connector
-Werkzeug
+flask
+mysql-connector-python
