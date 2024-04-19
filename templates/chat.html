@@ -116,37 +116,33 @@
     var mensagem = document.getElementById("mensagemInput").value;
 
     if (mensagem.trim() === "" || destinatario === "") {
-      alert("Por favor, preencha todos os campos antes de enviar a mensagem.");
-      return;
+        alert("Por favor, preencha todos os campos antes de enviar a mensagem.");
+        return;
     }
     
-      var data = {
+    var data = {
         "destinatario": destinatario,
         "mensagem": mensagem
-      };
-    
-      // Montar a requisição AJAX
-      var xhr = new XMLHttpRequest();
-      xhr.open("POST", "/enviar", true);
-      xhr.setRequestHeader("Content-Type", "application/json");
-    
-
-      xhr.onload = function() {
-      if (xhr.status === 200) {
-        // Ação a ser realizada em caso de sucesso, como atualizar as mensagens
-        console.log("Mensagem enviada com sucesso!");
-        // Limpar o campo de mensagem após o envio bem-sucedido
-        document.getElementById("mensagemInput").value = "";
-      } else {
-        // Ação a ser realizada em caso de erro, como exibir uma mensagem de alerta
-        console.error("Erro ao enviar mensagem: " + xhr.statusText);
-        alert("Erro ao enviar mensagem: " + xhr.statusText);
-      }
     };
     
-      // Converter o objeto JavaScript em JSON e enviar
-      xhr.send(JSON.stringify(data));
-    }
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/enviar", true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    
+    xhr.onload = function() {
+        if (xhr.status === 200) {
+            console.log("Mensagem enviada com sucesso!");
+            document.getElementById("mensagemInput").value = ""; // Limpar o campo de mensagem após o envio bem-sucedido
+        } else {
+            console.error("Erro ao enviar mensagem: " + xhr.statusText);
+            alert("Erro ao enviar mensagem: " + xhr.statusText);
+        }
+    };
+    
+    xhr.send(JSON.stringify(data));
+}
+    
+
     function enviarComEnter(event) {
     if (event.keyCode === 13) {
       event.preventDefault();
