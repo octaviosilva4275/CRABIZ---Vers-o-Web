@@ -1,2 +1,10 @@
-flask
-mysql-connector-python
+blinker
+click
+colorama
+Flask
+itsdangerous
+Jinja2
+MarkupSafe
+mysql-connector
+Werkzeug
+guinicorn
