@@ -62,7 +62,7 @@
       </div>
       <form id="formEnviarMensagem" action="/enviar" method="post">
         <div class="chatbox_input">
-          <input type="text" placeholder="Digite uma mensagem" id="mensagemInput" name="mensagem" required>
+          <input type="text" placeholder="Digite uma mensagem" id="mensagemInput" name="mensagem" required onkeypress="enviarComEnter(event)">
           <select id="destinatarioSelect" name="destinatario" required>
             <option value="">Selecione o destinatário</option>
             {% for contato in contatos %}
@@ -109,7 +109,12 @@
       xhr.open("GET", "/mensagens?contato=" + encodeURIComponent(nomeContato), true);
       xhr.send();
     }
-    
+    function enviarComEnter(event) {
+  if (event.keyCode === 13) {
+    event.preventDefault();
+    enviarMensagem();
+  }
+}
     // Função para enviar mensagem quando o botão é clicado
     function enviarMensagem() {
       var destinatario = document.getElementById("destinatarioSelect").value;
