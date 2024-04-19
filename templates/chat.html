@@ -75,86 +75,85 @@
     </div>
   </div>
   <script>
-    function selecionarECarregarMensagens(nomeContato) {
-      document.getElementById("nomeDestinatario").innerText = nomeContato;
-      // Define o nome do contato como o valor do destinatário no campo de seleção
-      document.getElementById("destinatarioSelect").value = nomeContato;
-  
-      var xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-          if (xhr.status === 200) {
-            var mensagens = JSON.parse(xhr.responseText);
-            var chatBox = document.getElementById("chatBox");
-            chatBox.innerHTML = '';
-            mensagens.forEach(function(mensagem) {
-              var messageDiv = document.createElement("div");
-              messageDiv.className = "message";
-              // Aqui fazemos a distinção entre mensagens enviadas pelo usuário atual e mensagens recebidas de outros usuários
-              var messageType = mensagem.remetente === nomeContato ? "frnd_message" : "my_message";
-              messageDiv.classList.add(messageType);
-              messageDiv.innerHTML = `
-                <div>
-                  <p>${mensagem.mensagem}
-                  <span>Enviado por: <b>${mensagem.nome}</b></span>
-                    </p>
-                </div>
-              `;
-              chatBox.appendChild(messageDiv);
-            });
-            chatBox.scrollTop = chatBox.scrollHeight;
-          }
+  function selecionarECarregarMensagens(nomeContato) {
+    document.getElementById("nomeDestinatario").innerText = nomeContato;
+    // Define o nome do contato como o valor do destinatário no campo de seleção
+    document.getElementById("destinatarioSelect").value = nomeContato;
+
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          var mensagens = JSON.parse(xhr.responseText);
+          var chatBox = document.getElementById("chatBox");
+          chatBox.innerHTML = '';
+          mensagens.forEach(function(mensagem) {
+            var messageDiv = document.createElement("div");
+            messageDiv.className = "message";
+            // Aqui fazemos a distinção entre mensagens enviadas pelo usuário atual e mensagens recebidas de outros usuários
+            var messageType = mensagem.remetente === nomeContato ? "frnd_message" : "my_message";
+            messageDiv.classList.add(messageType);
+            messageDiv.innerHTML = `
+              <div>
+                <p>${mensagem.mensagem}
+                <span>Enviado por: <b>${mensagem.nome}</b></span>
+                  </p>
+              </div>
+            `;
+            chatBox.appendChild(messageDiv);
+          });
+          chatBox.scrollTop = chatBox.scrollHeight;
         }
-      };
-      xhr.open("GET", "/mensagens?contato=" + encodeURIComponent(nomeContato), true);
-      xhr.send();
-    }
-  
-    // Função para enviar mensagem quando o botão é clicado
-    function enviarMensagem() {
-      var destinatario = document.getElementById("destinatarioSelect").value;
-      var mensagem = document.getElementById("mensagemInput").value;
-  
-      if (mensagem.trim() === "" || destinatario === "") {
-        alert("Por favor, preencha todos os campos antes de enviar a mensagem.");
-        return;
       }
-  
+    };
+    xhr.open("GET", "/mensagens?contato=" + encodeURIComponent(nomeContato), true);
+    xhr.send();
+  }
+
+  // Função para enviar mensagem quando o botão é clicado
+  function enviarMensagem() {
+    var destinatario = document.getElementById("destinatarioSelect").value;
+    var mensagem = document.getElementById("mensagemInput").value;
+
+    if (mensagem.trim() === "" || destinatario === "") {
+      alert("Por favor, preencha todos os campos antes de enviar a mensagem.");
+      return;
+    }
+    
       var data = {
         "destinatario": destinatario,
         "mensagem": mensagem
       };
-  
+    
       // Montar a requisição AJAX
       var xhr = new XMLHttpRequest();
       xhr.open("POST", "/enviar", true);
       xhr.setRequestHeader("Content-Type", "application/json");
-  
+    
+
       xhr.onload = function() {
-        if (xhr.status === 200) {
-          // Ação a ser realizada em caso de sucesso, como atualizar as mensagens
-          console.log("Mensagem enviada com sucesso!");
-          // Limpar o campo de mensagem após o envio bem-sucedido
-          document.getElementById("mensagemInput").value = "";
-        } else {
-          // Ação a ser realizada em caso de erro, como exibir uma mensagem de alerta
-          console.error("Erro ao enviar mensagem: " + xhr.statusText);
-          alert("Erro ao enviar mensagem: " + xhr.statusText);
-        }
-      };
-  
+      if (xhr.status === 200) {
+        // Ação a ser realizada em caso de sucesso, como atualizar as mensagens
+        console.log("Mensagem enviada com sucesso!");
+        // Limpar o campo de mensagem após o envio bem-sucedido
+        document.getElementById("mensagemInput").value = "";
+      } else {
+        // Ação a ser realizada em caso de erro, como exibir uma mensagem de alerta
+        console.error("Erro ao enviar mensagem: " + xhr.statusText);
+        alert("Erro ao enviar mensagem: " + xhr.statusText);
+      }
+    };
+    
       // Converter o objeto JavaScript em JSON e enviar
       xhr.send(JSON.stringify(data));
     }
-  
-    // Função para enviar mensagem quando a tecla "Enter" é pressionada
     function enviarComEnter(event) {
-      if (event.keyCode === 13) {
-        event.preventDefault();
-        enviarMensagem();
-      }
+    if (event.keyCode === 13) {
+      event.preventDefault();
+      enviarMensagem();
     }
-  </script>
+  }
+    </script>
     
   
   <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
